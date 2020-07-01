@@ -16,6 +16,8 @@ from PyFlow import getRawNodeInstance
 from PyFlow.Core.version import Version
 from PyFlow.Core.PyCodeCompiler import Py3CodeCompiler
 
+from DepthAI.Nodes.Global.GlobalPropertiesNode import GlobalPropertiesNode
+
 temp = {"globalProperties": {"Leon OS frequency [kHz]": 600000, "pipeline_version": "test"},
         "nodes": [{"id": "5aa09e0c", "name": "XLinkIn", "properties": {"streamName": "test"}},
                   {"id": "8ff0eadc", "name": "XLinkOut", "properties": {"streamName": "test2"}}],
@@ -30,6 +32,12 @@ def get_node_by_uid(nodes, uid):
     for node in nodes:
         if str(node.uid) == str(uid):
             return node
+
+
+def get_pin_value(pins, name):
+    for pin in pins:
+        if pin.name == name:
+            return pin.currentData()
 
 
 def export_node(node: NodeBase, nodes):
@@ -78,13 +86,17 @@ class ExportTool(ShelfTool):
             rootGraph = self.pyFlowInstance.graphManager.get().findRootGraph()
             nodes = []
             connections = []
+            global_config = {}
             for node in rootGraph.getNodesList():
+                if node.name == GlobalPropertiesNode.__name__:
+                    global_config["pipeline_version"] = "test"
+                    global_config["Leon OS frequency [kHz]"] = get_pin_value(node.inputs.values(), 'leon_os_freq')
                 node, node_connections = export_node(node, rootGraph.getNodesList())
                 nodes.append(node)
                 connections += node_connections
 
             export = json.dumps({
-                "globalProperties": {"Leon OS frequency [kHz]": 600000, "pipeline_version": "test"},
+                "globalProperties": global_config,
                 "nodes": nodes,
                 "connections": connections
             })

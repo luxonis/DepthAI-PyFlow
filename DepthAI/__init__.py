@@ -16,6 +16,7 @@ from DepthAI.Nodes.NeuralNetworks.ModelZooNetwork import ModelZooNetwork
 from DepthAI.Nodes.NeuralNetworks.TensorflowNetwork import TensorflowNetwork
 from DepthAI.Nodes.XLink.XLinkIn import XLinkIn
 from DepthAI.Nodes.XLink.XLinkOut import XLinkOut
+from DepthAI.Nodes.Global.GlobalPropertiesNode import GlobalPropertiesNode
 
 # Pins
 from DepthAI.pins.FramePin import FramePin
@@ -37,7 +38,7 @@ _EXPORTERS = OrderedDict()
 
 NODES_TO_ADD = [
     DemoNode, MyProducer, ColorCamera, MonoCamera, MyriadNetwork, CaffeNetwork, ModelZooNetwork, TensorflowNetwork,
-    XLinkIn, XLinkOut
+    XLinkIn, XLinkOut, GlobalPropertiesNode
 ]
 
 for node in NODES_TO_ADD:
