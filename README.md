@@ -17,7 +17,7 @@ The easy way to install PyFlow is::
 
 After PyFlow installed through pip or setup.py.
 
-Clone or download PyFlowOpenCV repository
+Clone or download DepthAI-PyFlow repository
 ```bash
     git clone https://github.com/luxonis/DepthAI-PyFlow.git
 ```
