@@ -5,22 +5,26 @@ from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 from DepthAI.pins.FramePin import Frame
 
 
-class ColorCamera(NodeBase):
+class DigitalZoomNode(NodeBase):
     def __init__(self, name):
-        super(ColorCamera, self).__init__(name)
+        super(DigitalZoomNode, self).__init__(name)
+        self.frame = self.createInputPin('frame', 'FramePin')
+        self.factor = self.createInputPin('factor', 'FloatPin')
         self.out = self.createOutputPin('out', 'FramePin')
         self.out.enableOptions(PinOptions.AllowMultipleConnections)
 
     @staticmethod
     def pinTypeHints():
         helper = NodePinsSuggestionsHelper()
+        helper.addInputDataType('FramePin')
+        helper.addInputDataType('FloatPin')
         helper.addOutputDataType('FramePin')
         helper.addOutputStruct(StructureType.Multi)
         return helper
 
     @staticmethod
     def category():
-        return 'Cameras'
+        return 'FrameOps'
 
     @staticmethod
     def keywords():

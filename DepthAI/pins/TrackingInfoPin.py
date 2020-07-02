@@ -4,7 +4,7 @@ from PyFlow.Core import PinBase
 from PyFlow.Core.Common import *
 
 
-class NeuralNetwork:
+class TrackingInfo:
     pass
 
 
@@ -18,15 +18,15 @@ class NoneDecoder(json.JSONDecoder):
         super(NoneDecoder, self).__init__(object_hook=self.object_hook, *args, **kwargs)
 
     def object_hook(self, vec3Dict):
-        return NeuralNetwork()
+        return TrackingInfo()
 
 
-class NeuralNetworkPin(PinBase):
+class TrackingInfoPin(PinBase):
     """doc string for ImagePin"""
 
     def __init__(self, name, parent, direction, **kwargs):
-        super(NeuralNetworkPin, self).__init__(name, parent, direction, **kwargs)
-        self.setDefaultValue(NeuralNetwork())
+        super(TrackingInfoPin, self).__init__(name, parent, direction, **kwargs)
+        self.setDefaultValue(TrackingInfo())
         self.disableOptions(PinOptions.Storable)
 
     @staticmethod
@@ -43,20 +43,20 @@ class NeuralNetworkPin(PinBase):
 
     @staticmethod
     def supportedDataTypes():
-        return ('NeuralNetworkPin',)
+        return ('TrackingInfoPin',)
 
     @staticmethod
     def pinDataTypeHint():
-        return 'NeuralNetworkPin', NeuralNetwork()
+        return 'TrackingInfoPin', TrackingInfo()
 
     @staticmethod
     def color():
-        return (100, 100, 200, 255)
+        return (200, 200, 200, 255)
 
     @staticmethod
     def internalDataStructure():
-        return NeuralNetwork
+        return TrackingInfo
 
     @staticmethod
     def processData(data):
-        return NeuralNetworkPin.internalDataStructure()()
+        return TrackingInfoPin.internalDataStructure()()

@@ -5,24 +5,24 @@ from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 from DepthAI.pins.FramePin import Frame
 
 
-class XLinkOut(NodeBase):
+class BackgroundSubstractionNode(NodeBase):
     def __init__(self, name):
-        super(XLinkOut, self).__init__(name)
-        self.streamName = self.createInputPin('streamName', 'StringPin')
-        self.inp = self.createInputPin('inp', 'AnyPin')
-        self.inp.enableOptions(PinOptions.AllowMultipleConnections)
+        super(BackgroundSubstractionNode, self).__init__(name)
+        self.frame = self.createInputPin('frame', 'FramePin')
+        self.out = self.createOutputPin('out', 'FramePin')
+        self.out.enableOptions(PinOptions.AllowMultipleConnections)
 
     @staticmethod
     def pinTypeHints():
         helper = NodePinsSuggestionsHelper()
-        helper.addInputDataType('StringPin')
-        helper.addInputDataType('AnyPin')
-        helper.addInputStruct(StructureType.Multi)
+        helper.addInputDataType('FramePin')
+        helper.addOutputDataType('FramePin')
+        helper.addOutputStruct(StructureType.Multi)
         return helper
 
     @staticmethod
     def category():
-        return 'XLink'
+        return 'FrameOps'
 
     @staticmethod
     def keywords():
@@ -33,4 +33,4 @@ class XLinkOut(NodeBase):
         return "Description in rst format."
 
     def compute(self, *args, **kwargs):
-        _ = self.inp.getData()
+        self.out.setData(Frame())

@@ -5,11 +5,11 @@ from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 from DepthAI.pins.FramePin import Frame
 
 
-class MonoCamera(NodeBase):
+class BW1093(NodeBase):
     def __init__(self, name):
-        super(MonoCamera, self).__init__(name)
-        self.out = self.createOutputPin('out', 'FramePin')
-        self.out.enableOptions(PinOptions.AllowMultipleConnections)
+        super(BW1093, self).__init__(name)
+        self.color = self.createOutputPin('color', 'FramePin')
+        self.color.enableOptions(PinOptions.AllowMultipleConnections)
 
     @staticmethod
     def pinTypeHints():
@@ -20,7 +20,7 @@ class MonoCamera(NodeBase):
 
     @staticmethod
     def category():
-        return 'Cameras'
+        return 'Devices'
 
     @staticmethod
     def keywords():
@@ -31,4 +31,4 @@ class MonoCamera(NodeBase):
         return "Description in rst format."
 
     def compute(self, *args, **kwargs):
-        self.out.setData(Frame())
+        self.color.setData(Frame())
