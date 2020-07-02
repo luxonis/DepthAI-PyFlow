@@ -1,3 +1,9 @@
+from DepthAI.Nodes.Encodings.H264EncodingNode import H264EncodingNode
+from DepthAI.Nodes.Encodings.H265EncodingNode import H265EncodingNode
+from DepthAI.Nodes.FrameOps.ROICropNode import ROICropNode
+from DepthAI.pins.H264FramePin import H264FramePin
+from DepthAI.pins.H265FramePin import H265FramePin
+
 PACKAGE_NAME = 'DepthAI'
 
 from collections import OrderedDict
@@ -10,17 +16,21 @@ from DepthAI.Nodes.Test.MyProducer import MyProducer
 from DepthAI.Nodes.Cameras.ColorCamera import ColorCamera
 from DepthAI.Nodes.Cameras.MonoCamera import MonoCamera
 
-from DepthAI.Nodes.NeuralNetworks.MyriadNetwork import MyriadNetwork
-from DepthAI.Nodes.NeuralNetworks.CaffeNetwork import CaffeNetwork
-from DepthAI.Nodes.NeuralNetworks.ModelZooNetwork import ModelZooNetwork
-from DepthAI.Nodes.NeuralNetworks.TensorflowNetwork import TensorflowNetwork
+from DepthAI.Nodes.NeuralNetworkCreators.MyriadNetwork import MyriadNetwork
+from DepthAI.Nodes.NeuralNetworkCreators.CaffeNetwork import CaffeNetwork
+from DepthAI.Nodes.NeuralNetworkCreators.ModelZooNetwork import ModelZooNetwork
+from DepthAI.Nodes.NeuralNetworkCreators.TensorflowNetwork import TensorflowNetwork
+from DepthAI.Nodes.NeuralNetworkInference.ObjectDetectionNode import ObjectDetectionNode
 from DepthAI.Nodes.XLink.XLinkIn import XLinkIn
 from DepthAI.Nodes.XLink.XLinkOut import XLinkOut
 from DepthAI.Nodes.Global.GlobalPropertiesNode import GlobalPropertiesNode
 
 # Pins
 from DepthAI.pins.FramePin import FramePin
-from DepthAI.pins.NeuralOutputPin import NeuralOutputPin
+from DepthAI.pins.BoundingBoxPin import BoundingBoxPin
+from DepthAI.pins.DetectionLabelPin import DetectionLabelPin
+from DepthAI.pins.NeuralNetworkPin import NeuralNetworkPin
+from DepthAI.pins.DepthVectorPin import DepthVectorPin
 from DepthAI.pins.MSenderPin import MSenderPin
 from DepthAI.pins.SSenderPin import SSenderPin
 
@@ -38,16 +48,20 @@ _EXPORTERS = OrderedDict()
 
 NODES_TO_ADD = [
     DemoNode, MyProducer, ColorCamera, MonoCamera, MyriadNetwork, CaffeNetwork, ModelZooNetwork, TensorflowNetwork,
-    XLinkIn, XLinkOut, GlobalPropertiesNode
+    XLinkIn, XLinkOut, GlobalPropertiesNode, ObjectDetectionNode, H264EncodingNode, H265EncodingNode, ROICropNode
 ]
 
 for node in NODES_TO_ADD:
     _NODES[node.__name__] = node
 
-_PINS[FramePin.__name__] = FramePin
-_PINS[NeuralOutputPin.__name__] = NeuralOutputPin
-_PINS[MSenderPin.__name__] = MSenderPin
-_PINS[SSenderPin.__name__] = SSenderPin
+PINS_TO_ADD = [
+    FramePin, NeuralNetworkPin, BoundingBoxPin, DetectionLabelPin, DepthVectorPin, MSenderPin, SSenderPin, H264FramePin,
+    H265FramePin
+]
+
+for pin in PINS_TO_ADD:
+    _PINS[pin.__name__] = pin
+
 
 _TOOLS[ExportTool.__name__] = ExportTool
 

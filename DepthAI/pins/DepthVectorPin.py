@@ -4,7 +4,7 @@ from PyFlow.Core import PinBase
 from PyFlow.Core.Common import *
 
 
-class NeuralOutput:
+class DepthVector:
     pass
 
 
@@ -18,15 +18,15 @@ class NoneDecoder(json.JSONDecoder):
         super(NoneDecoder, self).__init__(object_hook=self.object_hook, *args, **kwargs)
 
     def object_hook(self, vec3Dict):
-        return NeuralOutput()
+        return DepthVector()
 
 
-class NeuralOutputPin(PinBase):
+class DepthVectorPin(PinBase):
     """doc string for ImagePin"""
 
     def __init__(self, name, parent, direction, **kwargs):
-        super(NeuralOutputPin, self).__init__(name, parent, direction, **kwargs)
-        self.setDefaultValue(NeuralOutput())
+        super(DepthVectorPin, self).__init__(name, parent, direction, **kwargs)
+        self.setDefaultValue(DepthVector())
         self.disableOptions(PinOptions.Storable)
 
     @staticmethod
@@ -43,11 +43,11 @@ class NeuralOutputPin(PinBase):
 
     @staticmethod
     def supportedDataTypes():
-        return ('ImagePin',)
+        return ('DepthVectorPin',)
 
     @staticmethod
     def pinDataTypeHint():
-        return 'ImagePin', NeuralOutput()
+        return 'DepthVectorPin', DepthVector()
 
     @staticmethod
     def color():
@@ -55,8 +55,8 @@ class NeuralOutputPin(PinBase):
 
     @staticmethod
     def internalDataStructure():
-        return NeuralOutput
+        return DepthVector
 
     @staticmethod
     def processData(data):
-        return NeuralOutputPin.internalDataStructure()()
+        return DepthVectorPin.internalDataStructure()()
