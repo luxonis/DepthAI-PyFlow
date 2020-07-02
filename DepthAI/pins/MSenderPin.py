@@ -51,7 +51,7 @@ class MSenderPin(PinBase):
 
     @staticmethod
     def color():
-        return (200, 200, 50, 255)
+        return (150, 100, 50, 127)
 
     @staticmethod
     def internalDataStructure():

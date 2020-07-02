@@ -51,7 +51,7 @@ class DepthVectorPin(PinBase):
 
     @staticmethod
     def color():
-        return (200, 200, 50, 255)
+        return (200, 150, 50, 127)
 
     @staticmethod
     def internalDataStructure():

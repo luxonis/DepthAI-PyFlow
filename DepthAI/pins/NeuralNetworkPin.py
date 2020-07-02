@@ -51,7 +51,7 @@ class NeuralNetworkPin(PinBase):
 
     @staticmethod
     def color():
-        return (200, 200, 50, 255)
+        return (100, 100, 200, 127)
 
     @staticmethod
     def internalDataStructure():

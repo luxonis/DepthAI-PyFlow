@@ -51,7 +51,7 @@ class BoundingBoxPin(PinBase):
 
     @staticmethod
     def color():
-        return (200, 200, 50, 255)
+        return (150, 200, 150, 127)
 
     @staticmethod
     def internalDataStructure():
