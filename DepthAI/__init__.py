@@ -1,3 +1,5 @@
+from DepthAI.UI.NodeFactory import createNodeDepthAI
+
 PACKAGE_NAME = 'DepthAI'
 
 from collections import OrderedDict
@@ -6,11 +8,10 @@ from PyFlow.UI.UIInterfaces import IPackage
 # Class based nodes
 from DepthAI.Nodes.Test.DemoNode import DemoNode
 from DepthAI.Nodes.Test.MyProducer import MyProducer
-
 from DepthAI.Nodes.Devices.BW1093 import BW1093
 from DepthAI.Nodes.Devices.BW1097 import BW1097
 from DepthAI.Nodes.Devices.BW1098 import BW1098
-
+from DepthAI.Nodes.Debug.FramePreviewNode import FramePreviewNode
 from DepthAI.Nodes.CustomNeuralNetwork.ClassificationNetworkNode import ClassificationNetworkNode
 from DepthAI.Nodes.CustomNeuralNetwork.DetectorNetworkNode import DetectorNetworkNode
 from DepthAI.Nodes.CustomNeuralNetwork.OCRNetworkNode import OCRNetworkNode
@@ -69,8 +70,7 @@ NODES_TO_ADD = [
     DetectorNetworkNode, DepthLocationNode, ObjectTrackerNode, DigitalZoomNode, BackgroundSubstractionNode,
     AgeGenderDetectionNode, EmotionsRecognitionNode, FaceDetectionAdas1Node, FaceDetectionRetail4Node, OCRNetworkNode,
     FacialLandmarksAdas2Node, FacialLandmarksRetail9Node, MobilenetSSDNode, OCRNode, PedestrianDetectionAdas2Node,
-    PedestrianDetectionRetail13Node, PersonVehicleBikeDetectionNode, RawNetworkNode
-
+    PedestrianDetectionRetail13Node, PersonVehicleBikeDetectionNode, RawNetworkNode, FramePreviewNode
 ]
 
 for node in NODES_TO_ADD:
@@ -103,6 +103,10 @@ class DepthAI(IPackage):
     @staticmethod
     def GetNodeClasses():
         return _NODES
+
+    @staticmethod
+    def UINodesFactory():
+        return createNodeDepthAI
 
     @staticmethod
     def GetPinClasses():
