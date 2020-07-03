@@ -2,32 +2,31 @@ from PyFlow.Core import NodeBase
 from PyFlow.Core.Common import *
 from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 
-from DepthAI.pins.DetectionLabelPin import DetectionLabel
+from DepthAI.pins.NeuralTensorPin import NeuralTensor
 
 
-class ImageClassificationNode(NodeBase):
+class AgeGenderDetectionNode(NodeBase):
     def __init__(self, name):
-        super(ImageClassificationNode, self).__init__(name)
+        super(AgeGenderDetectionNode, self).__init__(name)
         self.frame = self.createInputPin('frame', 'FramePin')
-        self.frame.enableOptions(PinOptions.AllowMultipleConnections)
-        self.nnet = self.createInputPin('nnet', 'NeuralNetworkPin')
+        self.out_tensor = self.createOutputPin('out_tensor', 'NeuralTensorPin')
         self.threshold = self.createInputPin('threshold', 'FloatPin')
-        self.label = self.createOutputPin('label', 'DetectionLabelPin')
-        self.label.enableOptions(PinOptions.AllowMultipleConnections)
+        self.frame.enableOptions(PinOptions.AllowMultipleConnections)
+        self.out_tensor.enableOptions(PinOptions.AllowMultipleConnections)
 
     @staticmethod
     def pinTypeHints():
         helper = NodePinsSuggestionsHelper()
         helper.addInputDataType('FramePin')
-        helper.addInputDataType('NeuralNetworkPin')
-        helper.addOutputDataType('DetectionLabelPin')
+        helper.addOutputDataType('NeuralTensorPin')
+        helper.addOutputDataType('FloatPin')
         helper.addInputStruct(StructureType.Multi)
         helper.addOutputStruct(StructureType.Multi)
         return helper
 
     @staticmethod
     def category():
-        return 'Neural Network Inference'
+        return 'Model Zoo'
 
     @staticmethod
     def keywords():
@@ -39,6 +38,4 @@ class ImageClassificationNode(NodeBase):
 
     def compute(self, *args, **kwargs):
         _ = self.frame.getData()
-        _ = self.nnet.getData()
-        _ = self.threshold.getData()
-        self.label.setData(DetectionLabel())
+        self.out_tensor.setData(NeuralTensor())
