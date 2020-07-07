@@ -57,3 +57,7 @@ To allow you to start smoothly:
 Join us to our [discuss](https://discuss.luxonis.com/) / [slack](https://join.slack.com/t/luxonis-community/shared_invite/zt-emg3tas3-C_Q38TI5nZbKUazZdxwvXw) or [write us and email](mailto:support@luxonis.com) or [post comment under original issue](https://github.com/luxonis/depthai/issues/136)
 and ask anything related to project! 
 Please also let us know what features you'd need to achieve your goal with DepthAI - we'll be happy to help!
+
+## Attributions
+
+Icons made by [Smartline](https://www.flaticon.com/authors/smartline) from [www.flaticon.com](https://www.flaticon.com/)

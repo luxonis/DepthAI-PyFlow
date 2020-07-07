@@ -2,7 +2,7 @@ from PyFlow.Core import NodeBase
 from PyFlow.Core.Common import *
 from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 
-from DepthAI.pins.NeuralTensorPin import NeuralTensor
+from DepthAI.Pins.NeuralTensorPin import NeuralTensor
 
 
 class FacialLandmarksRetail9Node(NodeBase):

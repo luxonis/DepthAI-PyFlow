@@ -2,12 +2,13 @@ from PyFlow.Core import NodeBase
 from PyFlow.Core.Common import *
 from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 
-from DepthAI.pins.FramePin import Frame
+from DepthAI.Pins.FramePin import Frame
 
 
-class BW1098(NodeBase):
+class BW1098FFC(NodeBase):
     def __init__(self, name):
-        super(BW1098, self).__init__(name)
+        super(BW1098FFC, self).__init__(name)
+        self.stereo_baseline = self.createInputPin('stereo_baseline', 'FloatPin')
         self.color = self.createOutputPin('color', 'FramePin')
         self.mono_l = self.createOutputPin('mono_l', 'FramePin')
         self.mono_r = self.createOutputPin('mono_r', 'FramePin')
@@ -18,6 +19,7 @@ class BW1098(NodeBase):
     @staticmethod
     def pinTypeHints():
         helper = NodePinsSuggestionsHelper()
+        helper.addInputDataType('FloatPin')
         helper.addOutputDataType('FramePin')
         helper.addOutputStruct(StructureType.Multi)
         return helper

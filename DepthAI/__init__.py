@@ -1,16 +1,20 @@
-from DepthAI.UI.NodeFactory import createNodeDepthAI
-
 PACKAGE_NAME = 'DepthAI'
 
 from collections import OrderedDict
 from PyFlow.UI.UIInterfaces import IPackage
+import json
+from pathlib import Path
+from PyFlow.Core.Common import PinOptions
+from PyFlow.Core import NodeBase
+from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 
 # Class based nodes
 from DepthAI.Nodes.Test.DemoNode import DemoNode
 from DepthAI.Nodes.Test.MyProducer import MyProducer
 from DepthAI.Nodes.Devices.BW1093 import BW1093
 from DepthAI.Nodes.Devices.BW1097 import BW1097
-from DepthAI.Nodes.Devices.BW1098 import BW1098
+from DepthAI.Nodes.Devices.BW1098OBC import BW1098OBC
+from DepthAI.Nodes.Devices.BW1098FFC import BW1098FFC
 from DepthAI.Nodes.Debug.FramePreviewNode import FramePreviewNode
 from DepthAI.Nodes.CustomNeuralNetwork.ClassificationNetworkNode import ClassificationNetworkNode
 from DepthAI.Nodes.CustomNeuralNetwork.DetectorNetworkNode import DetectorNetworkNode
@@ -41,21 +45,23 @@ from DepthAI.Nodes.ModelZoo.VehicleDetectionAdas2Node import VehicleDetectionAda
 from DepthAI.Nodes.ModelZoo.VehicleLicensePlateDetectionNode import VehicleLicensePlateDetectionNode
 
 # Pins
-from DepthAI.pins.FramePin import FramePin
-from DepthAI.pins.BoundingBoxPin import BoundingBoxPin
-from DepthAI.pins.DetectionLabelPin import DetectionLabelPin
-from DepthAI.pins.NeuralTensorPin import NeuralTensorPin
-from DepthAI.pins.DepthVectorPin import DepthVectorPin
-from DepthAI.pins.MSenderPin import MSenderPin
-from DepthAI.pins.SSenderPin import SSenderPin
-from DepthAI.pins.H264FramePin import H264FramePin
-from DepthAI.pins.H265FramePin import H265FramePin
-from DepthAI.pins.TrackingInfoPin import TrackingInfoPin
+from DepthAI.Pins.FramePin import FramePin
+from DepthAI.Pins.BoundingBoxPin import BoundingBoxPin
+from DepthAI.Pins.DetectionLabelPin import DetectionLabelPin
+from DepthAI.Pins.NeuralTensorPin import NeuralTensorPin
+from DepthAI.Pins.DepthVectorPin import DepthVectorPin
+from DepthAI.Pins.MSenderPin import MSenderPin
+from DepthAI.Pins.SSenderPin import SSenderPin
+from DepthAI.Pins.H264FramePin import H264FramePin
+from DepthAI.Pins.H265FramePin import H265FramePin
+from DepthAI.Pins.TrackingInfoPin import TrackingInfoPin
 
 # Tools
 from DepthAI.Tools.ExportTool import ExportTool
+from DepthAI.Tools.CustomDeviceTool import CustomDeviceTool
 
 # Factories
+from DepthAI.UI.NodeFactory import createNodeDepthAI
 
 _FOO_LIBS = {}
 _NODES = {}
@@ -65,12 +71,12 @@ _PREFS_WIDGETS = OrderedDict()
 _EXPORTERS = OrderedDict()
 
 NODES_TO_ADD = [
-    DemoNode, MyProducer, BW1093, BW1097, BW1098, VehicleLicensePlateDetectionNode, VehicleDetectionAdas2Node, XLinkIn,
-    XLinkOut, GlobalPropertiesNode, ClassificationNetworkNode, H264EncodingNode, H265EncodingNode, ROICropNode,
-    DetectorNetworkNode, DepthLocationNode, ObjectTrackerNode, DigitalZoomNode, BackgroundSubstractionNode,
+    DemoNode, MyProducer, BW1093, BW1097, BW1098OBC, VehicleLicensePlateDetectionNode, VehicleDetectionAdas2Node,
+    XLinkOut, GlobalPropertiesNode, ClassificationNetworkNode, H264EncodingNode, H265EncodingNode, ROICropNode, XLinkIn,
+    DetectorNetworkNode, DepthLocationNode, ObjectTrackerNode, DigitalZoomNode, BackgroundSubstractionNode, BW1098FFC,
     AgeGenderDetectionNode, EmotionsRecognitionNode, FaceDetectionAdas1Node, FaceDetectionRetail4Node, OCRNetworkNode,
     FacialLandmarksAdas2Node, FacialLandmarksRetail9Node, MobilenetSSDNode, OCRNode, PedestrianDetectionAdas2Node,
-    PedestrianDetectionRetail13Node, PersonVehicleBikeDetectionNode, RawNetworkNode, FramePreviewNode
+    PedestrianDetectionRetail13Node, PersonVehicleBikeDetectionNode, RawNetworkNode, FramePreviewNode,
 ]
 
 for node in NODES_TO_ADD:
@@ -84,8 +90,10 @@ PINS_TO_ADD = [
 for pin in PINS_TO_ADD:
     _PINS[pin.__name__] = pin
 
+TOOLS_TO_ADD = [ExportTool, CustomDeviceTool]
 
-_TOOLS[ExportTool.__name__] = ExportTool
+for tool in TOOLS_TO_ADD:
+    _TOOLS[tool.__name__] = tool
 
 
 class DepthAI(IPackage):
@@ -102,7 +110,8 @@ class DepthAI(IPackage):
 
     @staticmethod
     def GetNodeClasses():
-        return _NODES
+        nodes = DepthAI.addDynamicNodes(_NODES.copy())
+        return nodes
 
     @staticmethod
     def UINodesFactory():
@@ -115,3 +124,52 @@ class DepthAI(IPackage):
     @staticmethod
     def GetToolClasses():
         return _TOOLS
+
+    @staticmethod
+    def addDynamicNodes(nodes):
+        path = Path(__file__).parent / Path('custom_devices.json')
+        if not path.exists():
+            return nodes
+        with open(path, 'r') as f:
+            data = json.load(f)
+        for item in data:
+            def node_init(self, name):
+                NodeBase.__init__(self, name)
+                for i in range(item['color_count']):
+                    node_pin = NodeBase.createOutputPin(self, f'color_{i}', 'FramePin')
+                    node_pin.enableOptions(PinOptions.AllowMultipleConnections)
+                    setattr(self, f'color_{i}', node_pin)
+                for i in range(item['mono_count']):
+                    node_pin = NodeBase.createOutputPin(self, f'mono_{i}', 'FramePin')
+                    node_pin.enableOptions(PinOptions.AllowMultipleConnections)
+                    setattr(self, f'mono_{i}', node_pin)
+
+            def node_category():
+                return 'Custom Devices'
+
+            def node_compute(self, *args, **kwargs):
+                pass
+
+            def node_pin_type_hints():
+                helper = NodePinsSuggestionsHelper()
+                return helper
+
+            def node_keywords():
+                return []
+
+            def node_description(*args, **kwargs):
+                return "Description in rst format."
+
+            nodes[item['name']] = type(
+                item['name'],
+                (NodeBase,),
+                {
+                    "__init__": node_init,
+                    "compute": node_compute
+                }
+            )
+            setattr(nodes[item['name']], 'category', node_category)
+            setattr(nodes[item['name']], 'pinTypeHints', node_pin_type_hints)
+            setattr(nodes[item['name']], 'keywords', node_keywords)
+            setattr(nodes[item['name']], 'description', node_description)
+        return nodes

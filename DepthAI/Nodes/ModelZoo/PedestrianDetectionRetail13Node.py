@@ -2,8 +2,8 @@ from PyFlow.Core import NodeBase
 from PyFlow.Core.Common import *
 from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 
-from DepthAI.pins.BoundingBoxPin import BoundingBox
-from DepthAI.pins.NeuralTensorPin import NeuralTensor
+from DepthAI.Pins.BoundingBoxPin import BoundingBox
+from DepthAI.Pins.NeuralTensorPin import NeuralTensor
 
 
 class PedestrianDetectionRetail13Node(NodeBase):

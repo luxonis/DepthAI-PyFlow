@@ -2,8 +2,8 @@ from PyFlow.Core import NodeBase
 from PyFlow.Core.Common import *
 from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 
-from DepthAI.pins.DepthVectorPin import DepthVector
-from DepthAI.pins.FramePin import Frame
+from DepthAI.Pins.DepthVectorPin import DepthVector
+from DepthAI.Pins.FramePin import Frame
 
 
 class ObjectTrackerNode(NodeBase):

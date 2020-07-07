@@ -2,26 +2,12 @@ import json
 from pathlib import Path
 
 from PyFlow.Core import NodeBase
-from PyFlow.Core.Common import Direction
+from PyFlow.Core.Common import *
 from PyFlow.UI.Tool.Tool import ShelfTool
 from Qt import QtGui
-from datetime import datetime
-from Qt.QtWidgets import QFileDialog
-from Qt.QtWidgets import QMessageBox
-
-from PyFlow import getRawNodeInstance
-from PyFlow.Core.Common import *
-from PyFlow.UI.UIInterfaces import IDataExporter
-from PyFlow import getRawNodeInstance
-from PyFlow.Core.version import Version
-from PyFlow.Core.PyCodeCompiler import Py3CodeCompiler
+from Qt.QtWidgets import QFileDialog, QMessageBox
 
 from DepthAI.Nodes.Global.GlobalPropertiesNode import GlobalPropertiesNode
-
-temp = {"globalProperties": {"Leon OS frequency [kHz]": 600000, "pipeline_version": "test"},
-        "nodes": [{"id": "5aa09e0c", "name": "XLinkIn", "properties": {"streamName": "test"}},
-                  {"id": "8ff0eadc", "name": "XLinkOut", "properties": {"streamName": "test2"}}],
-        "connections": [{"node1Id": "5aa09e0c", "node2Id": "8ff0eadc", "node1Output": "out", "node2Input": "in"}]}
 
 
 def node_id(node: NodeBase):
@@ -75,7 +61,7 @@ class ExportTool(ShelfTool):
 
     @staticmethod
     def getIcon():
-        return QtGui.QIcon(str((Path(__file__).parent / Path('res/export.jpg')).resolve().absolute()))
+        return QtGui.QIcon(str((Path(__file__).parent / Path('res/export.png')).resolve().absolute()))
 
     @staticmethod
     def name():

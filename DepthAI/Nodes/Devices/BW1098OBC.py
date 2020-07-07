@@ -5,26 +5,26 @@ from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 from DepthAI.Pins.FramePin import Frame
 
 
-class ROICropNode(NodeBase):
+class BW1098OBC(NodeBase):
     def __init__(self, name):
-        super(ROICropNode, self).__init__(name)
-        self.frame = self.createInputPin('frame', 'FramePin')
-        self.bbox = self.createInputPin('bbox', 'BoundingBoxPin')
-        self.out = self.createOutputPin('out', 'FramePin')
-        self.out.enableOptions(PinOptions.AllowMultipleConnections)
+        super(BW1098OBC, self).__init__(name)
+        self.color = self.createOutputPin('color', 'FramePin')
+        self.mono_l = self.createOutputPin('mono_l', 'FramePin')
+        self.mono_r = self.createOutputPin('mono_r', 'FramePin')
+        self.color.enableOptions(PinOptions.AllowMultipleConnections)
+        self.mono_l.enableOptions(PinOptions.AllowMultipleConnections)
+        self.mono_r.enableOptions(PinOptions.AllowMultipleConnections)
 
     @staticmethod
     def pinTypeHints():
         helper = NodePinsSuggestionsHelper()
-        helper.addInputDataType('FramePin')
-        helper.addInputDataType('BoundingBoxPin')
         helper.addOutputDataType('FramePin')
         helper.addOutputStruct(StructureType.Multi)
         return helper
 
     @staticmethod
     def category():
-        return 'FrameOps'
+        return 'Devices'
 
     @staticmethod
     def keywords():
@@ -35,4 +35,6 @@ class ROICropNode(NodeBase):
         return "Description in rst format."
 
     def compute(self, *args, **kwargs):
-        self.out.setData(Frame())
+        self.color.setData(Frame())
+        self.mono_l.setData(Frame())
+        self.mono_r.setData(Frame())

@@ -2,7 +2,7 @@ from PyFlow.Core import NodeBase
 from PyFlow.Core.Common import *
 from PyFlow.Core.NodeBase import NodePinsSuggestionsHelper
 
-from DepthAI.pins.H265FramePin import H265Frame
+from DepthAI.Pins.H265FramePin import H265Frame
 
 
 class H265EncodingNode(NodeBase):
