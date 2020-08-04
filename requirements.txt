@@ -1,1 +1,2 @@
+-r https://raw.githubusercontent.com/wonderworks-software/PyFlow/master/requirements/requirements-standalone.txt
 jsonschema==3.2.0
